@@ -1,18 +1,43 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
+import 'bulma/css/bulma.css';
+import foods from "./foods.json"
+import Foodbox from "./Foodbox.js"
+import Searcharea from './Searcharea.js';
 
-class App extends Component {
+class App extends React.Component {
+  
+  state = {
+    foods : foods,
+  }
+
+  filterFoods = (e) => {
+    let foodsSearcher = [...this.state.foods].filter(food => {
+        return food.name.toLowerCase().includes(e.target.value.toLowerCase())
+    })
+    this.setState({
+      foods: foodsSearcher 
+    })
+  }
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <h1><strong>IronNutrition</strong></h1>
+
+        <input className="searchinput" type="text" onChange={this.filterFoods} placeholder="Search food"/>
+
+        {          
+          this.state.foods.map((foodItem,index) => {
+                return <Foodbox
+                  key={index}
+                  index={index}
+                  {...foodItem}  
+                />
+              }                 
+          ) 
+        }
+
       </div>
     );
   }
